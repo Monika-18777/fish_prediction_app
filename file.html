@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fish Species Predictor</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* ChatGPT-style Chatbot Styles */
+    #chatbot-container {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.15);
+      background-color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+      z-index: 9999;
+      border: 1px solid #ddd;
+    }
+
+    #chat-header {
+      background-color: #0088cc;
+      color: #fff;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    #chat-log {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background-color: #f9f9f9;
+    }
+
+    .message {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 8px;
+      max-width: 80%;
+      word-wrap: break-word;
+    }
+
+    .bot {
+      background-color: #e0f1ff;
+      color: #333;
+      align-self: flex-start;
+    }
+
+    .user {
+      background-color: #0088cc;
+      color: #fff;
+      align-self: flex-end;
+    }
+
+    #user-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    #user-message {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #user-input button {
+      background-color: #0088cc;
+      color: white;
+      border: none;
+      padding: 0 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #user-input button:hover {
+      background-color: #0073b1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Login / Signup -->
+  <div id="login-slide" class="container">
+    <h1>🐟 Fish Species Prediction</h1>
+    <img id="fish-logo" src="fish_icon.png" alt="Fish Icon">
+
+    <form id="login-form">
+      <input type="text" placeholder="Username" required><br>
+      <input type="password" placeholder="Password" required><br>
+      <button type="submit">Login</button>
+      <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+    </form>
+
+    <form id="signup-form" style="display:none">
+      <input type="text" placeholder="Full Name" required><br>
+      <input type="email" placeholder="Email" required><br>
+      <input type="password" placeholder="Password" required><br>
+      <button type="submit">Sign Up</button>
+      <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+    </form>
+  </div>
+
+  <!-- Slide 2: Image Upload and Prediction -->
+  <div id="main-slide" class="container hidden">
+    <h2>Upload a Fish Image</h2>
+    <input type="file" id="imageInput" accept="image/*" onchange="predictFish()">
+    <div id="loader"></div>
+    <img id="preview-image" class="fish-image" />
+
+    <div id="result-container" class="result-card hidden">
+      <h3>Prediction Result</h3>
+      <p><strong>Species:</strong> <span id="species-name"></span></p>
+      <p><strong>Confidence:</strong> <span id="confidence-score"></span></p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="confidence-fill"></div>
+      </div>
+
+      <div class="fish-details">
+        <p><strong>Scientific Name:</strong> <span id="scientific-name"></span></p>
+        <p><strong>Average Size:</strong> <span id="average-size"></span></p>
+        <p><strong>Average Weight:</strong> <span id="weight"></span></p>
+        <p><strong>Lifespan:</strong> <span id="lifespan"></span></p>
+        <p><strong>Habitat:</strong> <span id="habitat"></span></p>
+        <p><strong>Distribution:</strong> <span id="distribution"></span></p>
+        <p><strong>Conservation Status:</strong> <span id="status"></span></p>
+        <p><strong>Fun Fact:</strong> <span id="fun-fact"></span></p>
+      </div>
+
+      <button class="download-btn" onclick="downloadPDF()">📥 Download Report</button>
+    </div>
+  </div>
+
+  <!-- Chatbot -->
+  <div id="chatbot-container">
+    <div id="chat-header">💬 FishBot Assistant</div>
+    <div id="chat-log"></div>
+    <div id="user-input">
+      <input type="text" id="user-message" placeholder="Ask something...">
+      <button onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="script.js"></script>
+
+  <script>
+    const chatLog = document.getElementById('chat-log');
+
+    function sendMessage() {
+      const userInput = document.getElementById('user-message');
+      const message = userInput.value.trim();
+      if (message === '') return;
+
+      appendMessage('user', message);
+      userInput.value = '';
+
+      let botReply = '';
+
+      if (message.toLowerCase().includes('hi') || message.toLowerCase().includes('hello')) {
+        botReply = "Hello! 👋 I can help you predict fish species from images.";
+      } else if (message.toLowerCase().includes('how')) {
+        botReply = "Upload a fish image and click 'Predict' to get species details.";
+      } else if (message.toLowerCase().includes('report')) {
+        botReply = "Once prediction is complete, use 'Download Report' to get a PDF.";
+      } else if (message.toLowerCase().includes('bye')) {
+        botReply = "Goodbye! 🐟 Have a great day!";
+      } else {
+        botReply = "I'm FishBot! You can ask about uploading, predicting, or reports.";
+      }
+
+      setTimeout(() => appendMessage('bot', botReply), 500);
+    }
+
+    function appendMessage(sender, message) {
+      const messageElem = document.createElement('div');
+      messageElem.className = `message ${sender}`;
+      messageElem.textContent = message;
+      chatLog.appendChild(messageElem);
+      chatLog.scrollTop = chatLog.scrollHeight;
+    }
+  </script>
+
+</body>
+</html>

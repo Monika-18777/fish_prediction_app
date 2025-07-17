@@ -1,0 +1,141 @@
+/* style.css */
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(90deg,hsl(210, 85%, 61%) 0%, rgb(161, 193, 209) 50%, rgb(91, 175, 239) 100%);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.container {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  animation: fadeIn 0.5s ease-in;
+}
+
+h1, h2, h3 {
+  color: #004d40;
+  margin-bottom: 1rem;
+}
+
+input[type="file"],
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  margin: 0.5rem 0;
+  padding: 10px;
+  width: 90%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #009688;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(90deg,hsl(210, 85%, 61%) 0%, rgb(161, 193, 209) 50%, rgb(91, 175, 239) 100%);
+}
+
+.hidden {
+  display: none;
+}
+
+#fish-logo {
+  width: 100px;
+  margin: 1rem auto;
+  display: block;
+}
+
+.fish-image {
+  max-width: 80%;
+  height: auto;
+  margin: 1rem 0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.result-card {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 2px solid #009688;
+  border-radius: 10px;
+  background-color: #e0f7fa;
+  text-align: left;
+  font-size: 1rem;
+}
+
+.result-card p {
+  margin: 0.3rem 0;
+}
+
+.fish-details {
+  margin-top: 1rem;
+}
+
+.download-btn {
+  margin-top: 1.5rem;
+  background: #00796b;
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.progress-bar {
+  background-color: #ccc;
+  border-radius: 10px;
+  height: 20px;
+  width: 100%;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  background-color: #4caf50;
+  height: 100%;
+  border-radius: 10px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+#loader {
+  display: none;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 1rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
